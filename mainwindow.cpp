@@ -116,15 +116,20 @@ void describe(QString path)
             qDebug()<<"\n";
 
             // Show black line around object
-            cv::Mat show = src;
             cv::Scalar black_line  = cv::Scalar(0,0,0);
-            drawContours( show, contours, i , black_line,10);
-            imshow( "Found Object", show );
+            drawContours( src, contours, i , black_line,10);
 
-            // Wait for key press
-            cv::waitKey(0);
+            std::string info = colors[color_ind].toStdString()+" "+shape.toStdString();
+            cv::Size sz = cv::getTextSize(info,0,0.5,2,nullptr);
+            x-=sz.width/2;
+            y+=sz.height/2;
+            cv::putText(src,info,{x,y},0,.5,{255-avg_BGR[0],255-avg_BGR[1],255-avg_BGR[2]},2,cv::LINE_8,0);
         }
     }
+    imshow( "Found Object", src );
+
+    // Wait for key press
+    cv::waitKey(0);
 }
 
 MainWindow::MainWindow(QWidget *parent)
